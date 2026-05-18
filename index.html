@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Portal</title>
+    <!-- Modern Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #0f1115;
+            --bg-card: #181b22;
+            --bg-input: #22252e;
+            --bg-input-focus: #2a2e3a;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-blurple: #5865f2;
+            --accent-blurple-hover: #4752c4;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --card-border: #2d313c;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--card-border);
+            padding: 30px 20px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 760px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-blurple), #8a93ff);
+        }
+
+        h1, h2, h3 {
+            color: #fff;
+            font-weight: 700;
+            margin-top: 0;
+        }
+
+        h1 { font-size: 1.8rem; text-align: center; letter-spacing: -0.025em; margin-bottom: 8px; }
+        h2 { font-size: 1.4rem; text-align: center; }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .portal-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .menu-card {
+            background-color: var(--bg-input);
+            border: 2px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 24px 20px;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .menu-card:hover {
+            border-color: var(--accent-blurple);
+            transform: translateY(-2px);
+            background-color: var(--bg-input-focus);
+        }
+
+        .menu-card h3 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .form-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-blurple);
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 6px;
+            margin: 25px 0 15px 0;
+            font-weight: 700;
+        }
+
+        .form-page {
+            display: none;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 6px 10px;
+            margin-bottom: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: var(--radius-sm);
+        }
+
+        .back-btn:hover {
+            color: #fff;
+            background-color: var(--bg-input);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--card-border);
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            font-size: 14px;
+            box-sizing: border-box;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.4;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-blurple);
+            background-color: var(--bg-input-focus);
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button.btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-submit {
+            background-color: var(--accent-blurple);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-blurple-hover);
+        }
+
+        #status {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+            display: none;
+        }
+
+        .success { background-color: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .error { background-color: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+        @media (max-width: 600px) {
+            .portal-menu {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .action-row {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- DASHBOARD MENU -->
+    <div id="mainPortal">
+        <h1>Application Portal</h1>
+        <p class="subtitle">Please select the position you want to apply for</p>
+        <div class="portal-menu">
+            <div class="menu-card" onclick="switchPage('staffPage')">
+                <h3>Staff Application</h3>
+                <p style="color: var(--text-muted); font-size: 12px; margin: 0; line-height: 1.4;">Review and manage server status, activities, and moderation.</p>
+            </div>
+            <div class="menu-card" onclick="switchPage('testerPage')">
+                <h3>Tester Application</h3>
+                <p style="color: var(--text-muted); font-size: 12px; margin: 0; line-height: 1.4;">Evaluate players, monitor duels, and judge tier rankings.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAFF APPLICATION PAGE -->
+    <div id="staffPage" class="form-page">
+        <button class="back-btn" onclick="switchPage('mainPortal')">← Back to Selection</button>
+        <h2>Staff Application</h2>
+        <p class="subtitle">Complete all 25 questions honestly</p>
+        
+        <form id="staffForm">
+            <div class="form-section-title">General Information</div>
+            <div class="form-group"><label>1. What is your Discord username and ID?</label><input type="text" required></div>
+            <div class="form-group"><label>2. How old are you?</label><input type="text" required></div>
+            <div class="form-group"><label>3. What region and timezone are you in?</label><input type="text" required></div>
+            <div class="form-group"><label>4. How many hours per week can you be active?</label><input type="text" required></div>
+            <div class="form-group"><label>5. How long have you been in this server? Give your exact join date.</label><input type="text" required></div>
+            
+            <div class="form-section-title">Server Activity & Context</div>
+            <div class="form-group"><label>6. Name three active regular members in this server right now. Not staff, not YouTubers.</label><textarea required></textarea></div>
+            <div class="form-group"><label>7. What's the most recent drama or argument you saw in general chat? What was it about?</label><textarea required></textarea></div>
+            <div class="form-group"><label>8. Who is the current Netherite rank holder in your main gamemode? If empty, say empty.</label><input type="text" required></div>
+            <div class="form-group"><label>9. What's one thing you would actually change about this server? Something you've noticed yourself, not generic.</label><textarea required></textarea></div>
+            <div class="form-group"><label>10. Describe the last match result you saw posted in &lt;#1502361639326843050&gt;. Who fought and who won?</label><textarea required></textarea></div>
+            
+            <div class="form-section-title">Conflict Resolution & Scenarios</div>
+            <div class="form-group"><label>11. What would you do if you caught another staff member boosting their friend's rank?</label><textarea required></textarea></div>
+            <div class="form-group"><label>12. A player DMs you offering money to fast-track their test. What do you do?</label><textarea required></textarea></div>
+            <div class="form-group"><label>13. You find out a tester is letting friends win duels. How do you handle it?</label><textarea required></textarea></div>
+            <div class="form-group"><label>14. A popular content creator breaks a rule. Do you treat them differently? Why or why not?</label><textarea required></textarea></div>
+            <div class="form-group"><label>15. How would you handle a player accusing you of bias after you deny their rank appeal?</label><textarea required></textarea></div>
+            <div class="form-group"><label>16. What would you do if a higher-up asked you to give someone a rank they didn't earn?</label><textarea required></textarea></div>
+            <div class="form-group"><label>17. You see a staff member leaking private duel recordings. What's your move?</label><textarea required></textarea></div>
+            <div class="form-group"><label>18. A player sends fake edited screenshots claiming they won. How do you verify?</label><textarea required></textarea></div>
+            <div class="form-group"><label>19. How do you stay unbiased with friends or people you dislike?</label><textarea required></textarea></div>
+            <div class="form-group"><label>20. Describe a time you made an unpopular decision that was right, even if people got mad.</label><textarea required></textarea></div>
+            
+            <div class="form-section-title">Capabilities & Logistics</div>
+            <div class="form-group"><label>21. What skills do you bring? (Bot management, video editing, events, moderation, etc.)</label><textarea required></textarea></div>
+            <div class="form-group"><label>22. Are you willing to have your own tests and duels monitored by other staff?</label><input type="text" required></div>
+            <div class="form-group"><label>23. Everyone starts from Staff rank and works up. Are you okay with proving yourself over time?</label><input type="text" required></div>
+            <div class="form-group"><label>24. Have you been staff anywhere before? If yes, where and why did you leave?</label><textarea required></textarea></div>
+            <div class="form-group"><label>25. Can you voice chat when needed? Do you have a working mic and can you screenshare your gameplay or Discord if staff asks?</label><input type="text" required></div>
+
+            <div class="action-row">
+                <button type="submit" class="btn btn-submit">Submit Staff Application</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- TESTER APPLICATION PAGE -->
+    <div id="testerPage" class="form-page">
+        <button class="back-btn" onclick="switchPage('mainPortal')">← Back to Selection</button>
+        <h2>Tester Application</h2>
+        <p class="subtitle">Complete all 15 questions honestly</p>
+        
+        <form id="testerForm">
+            <div class="form-section-title">Applicant Profile</div>
+            <div class="form-group"><label>1. What is your Discord username and ID?</label><input type="text" required></div>
+            <div class="form-group"><label>2. What gamemode(s) do you want to test for?</label><input type="text" required></div>
+            <div class="form-group"><label>3. What is your current rank in those gamemode(s)?</label><input type="text" required></div>
+            <div class="form-group"><label>4. How long have you been playing Minecraft Mobile Java PvP?</label><input type="text" required></div>
+            <div class="form-group"><label>5. Why do you want to become a tester?</label><textarea required></textarea></div>
+            
+            <div class="form-section-title">Integrity & Operations</div>
+            <div class="form-group"><label>6. Can you remain unbiased when testing players you know or don't like?</label><input type="text" required></div>
+            <div class="form-group"><label>7. Are you able to record and verify duels properly?</label><input type="text" required></div>
+            <div class="form-group"><label>8. What region and timezone are you in?</label><input type="text" required></div>
+            <div class="form-group"><label>9. How active can you be? (Hours per week)</label><input type="text" required></div>
+            <div class="form-group"><label>10. Any previous testing or ranking experience?</label><textarea required></textarea></div>
+            
+            <div class="form-section-title">Judgement & Logistics</div>
+            <div class="form-group"><label>11. Describe a time you had to judge someone's skill fairly even when it was difficult.</label><textarea required></textarea></div>
+            <div class="form-group"><label>12. How do you handle a player who argues with your test result?</label><textarea required></textarea></div>
+            <div class="form-group"><label>13. What makes a good tester in your opinion?</label><textarea required></textarea></div>
+            <div class="form-group"><label>14. Can you voice chat and screenshare during tests?</label><input type="text" required></div>
+            <div class="form-group"><label>15. Are you okay with having your own tests reviewed by other staff?</label><input type="text" required></div>
+
+            <div class="action-row">
+                <button type="submit" class="btn btn-submit">Submit Tester Application</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- STATUS DISPLAY -->
+    <div id="status"></div>
+</div>
+
+<script>
+    function switchPage(pageId) {
+        document.getElementById('mainPortal').style.display = 'none';
+        document.getElementById('staffPage').style.display = 'none';
+        document.getElementById('testerPage').style.display = 'none';
+        document.getElementById('status').style.display = 'none';
+        
+        const target = document.getElementById(pageId);
+        if (target) {
+            target.style.display = 'block';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const WEBHOOKS = {
+        staff: "https://discord.com/api/webhooks/1505982750757486652/yR-dITDRGeOh8MgdU-qt2E8ImoU7giBfg-yUggZ9XEx459fQmajTTD84P5Ugk_VyIkI-",
+        tester: "https://discord.com/api/webhooks/1505983014327423180/SODWzVKibmmozT-_0FxQxCU9A4hXi1B16XP6QX7gflAiE80BxwOZFwsVKjzvYb8GBXIM"
+    };
+
+    document.getElementById('staffForm').addEventListener('submit', function(e) { 
+        e.preventDefault(); 
+        handleFormSubmit('staff', this); 
+    });
+    
+    document.getElementById('testerForm').addEventListener('submit', function(e) { 
+        e.preventDefault(); 
+        handleFormSubmit('tester', this); 
+    });
+
+    async function handleFormSubmit(type, formElement) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.style.display = 'none';
+
+        const fields = [];
+        const inputs = formElement.querySelectorAll('input, textarea');
+        const applicantName = inputs[0].value || "Unknown Applicant";
+
+        inputs.forEach((input, index) => {
+            const labelElement = input.parentElement.querySelector('label');
+            const questionText = labelElement ? labelElement.innerText : "Question " + (index + 1);
+            fields.push({
+                name: questionText,
+                value: input.value.trim() || "No response provided",
+                inline: false
+            });
+        });
+
+        const discordPayload = {
+            embeds: [{
+                title: "📝 New " + type.toUpperCase() + " Application",
+                description: "Submitted by **" + applicantName + "**",
+                color: type === 'staff' ? 5793266 : 10181046, 
+                fields: fields,
+                timestamp: new Date().toISOString(),
+                footer: { text: "Application Portal Utility" }
+            }]
+        };
+
+        try {
+            const response = await fetch(WEBHOOKS[type], {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(discordPayload)
+            });
+
+            if (response.ok) {
+                showStatus('Application submitted successfully! Check Discord.', 'success');
+                formElement.reset();
+                setTimeout(function() { switchPage('mainPortal'); }, 3000);
+            } else {
+                showStatus('Failed to send. Discord Status Error: ' + response.status, 'error');
+            }
+        } catch (error) {
+            showStatus('Network error occurred. Check your connection.', 'error');
+            console.error(error);
+        }
+    }
+
+    function showStatus(text, className) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.innerText = text;
+        statusDiv.className = className;
+        statusDiv.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
